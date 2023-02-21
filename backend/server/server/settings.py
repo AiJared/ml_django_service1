@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # local application
     'apps.endpoints',
+    'apps.ml',
     # 3rd party applications
     "rest_framework",
 ]
