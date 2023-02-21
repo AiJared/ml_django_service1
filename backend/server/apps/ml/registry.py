@@ -27,7 +27,7 @@ class MLRegistry:
         if algorithm_created:
             status = MLAlgorithmStatus(status=algorithm_status,
                                         created_by=owner,
-                                        parent_algorithm=database_object,
+                                        parent_mlalgorithm=database_object,
                                         active=True)
             status.save()
         # add to registry
