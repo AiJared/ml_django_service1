@@ -19,6 +19,7 @@ application = get_wsgi_application()
 import inspect
 from apps.ml.registry import MLRegistry
 from apps.ml.income_classifier.random_forest import RandomForestClassifier
+from apps.ml.income_classifier.extra_trees import ExtrTreesClassifier
 
 try:
     registry = MLRegistry() # create ML registry
@@ -34,6 +35,19 @@ try:
         owner="Jared",
         algorithm_description="Simple random forest with pre- and post processing",
         algorithm_code=inspect.getsource(RandomForestClassifier)
+    )
+    # Extra Trees classifier
+    et = ExtrTreesClassifier()
+    # add to ML registry
+    registry.add_algorithm(
+        endpoint_name="income_classifier",
+        algorithm_object=et,
+        algorithm_name="extra tress",
+        algorithm_status="testing",
+        algorithm_version="0.0.1",
+        owner="Jared",
+        algorithm_description="Extra Trees with simple pre- and post-processing",
+        algorithm_code=inspect.getsource(ExtrTreesClassifier)
     )
 
 except Exception as e:
