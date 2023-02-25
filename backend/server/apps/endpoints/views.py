@@ -154,8 +154,8 @@ class StopABTestView(views.APIView):
                 return Response({"message": "AB Test already finished."})
             date_now = datetime.datetime.now()
             #alg #1 accuracy
-            all_responses_1 = MLRequest.objects.filter(parent_mlalgorithm=ab_test.parent_mlalgorithm_1, created_at__gt=ab_test.created_at, created_at_lt=date_now).count()
-            correct_responses_1 = MLRequest.objects.filter(parent_mlalgorithm=ab_test.parent_mlalgorithm_1, create_at__gt=ab_test.created_at, created_at__lt=date_now, response=F('feedback')).count()
+            all_responses_1 = MLRequest.objects.filter(parent_mlalgorithm=ab_test.parent_mlalgorithm_1, created_at__gt=ab_test.created_at, created_at__lt=date_now).count()
+            correct_responses_1 = MLRequest.objects.filter(parent_mlalgorithm=ab_test.parent_mlalgorithm_1, created_at__gt=ab_test.created_at, created_at__lt=date_now, response=F('feedback')).count()
             accuracy_1 = correct_responses_1 / float(all_responses_1)
             print(all_responses_1, correct_responses_1, accuracy_1)
 
