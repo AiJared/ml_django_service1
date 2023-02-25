@@ -23,6 +23,9 @@ from apps.endpoints.serializers import MLAlgorithmStatusSerializer
 from apps.endpoints.models import MLRequest
 from apps.endpoints.serializers import MLRequestSerializer
 
+from apps.endpoints.models import ABTest
+from apps.endpoints.serializers import ABTestSerializer
+
 class EndpointViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = EndpointSerializer
     queryset = Endpoints.objects.all()
@@ -105,3 +108,35 @@ class PredictView(views.APIView):
         prediction["request_id"] = ml_request.id
 
         return Response(prediction)
+    
+class ABTestViewSet(
+    mixins.RetrieveModelMixin, mixins.ListModelMixin,
+    viewsets.GenericViewSet, mixins.CreateModelMixin,
+    mixins.UpdateModelMixin):
+    serializer_class = ABTestSerializer
+    queryset = ABTest.objects.all()
+
+    def perform_create(self, serializer):
+        try:
+            with transaction.atomic():
+                instance = serializer.save()
+                # update status for first algorithm
+
+                status_1 = MLAlgorithmStatus(status = "ab_testing",
+                                             created_by=instance.created_by,
+                                             parent_mlalgorithm=instance.parent_mlalgorithm_1,
+                                             active=True)
+                status_1.save()
+                deactivate_other_statuses(status_1)
+                #update status for second algorithm
+                status_2 = MLAlgorithmStatus(
+                    status = "ab_testing",
+                    created_by = instance.created_by,
+                    parent_mlalgorithm = instance.parent_mlalgorithm_2,
+                    active=True
+                )
+                status_2.save()
+                deactivate_other_statuses(status_2)
+
+        except Exception as e:
+            raise APIException(str(e))
