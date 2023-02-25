@@ -1,7 +1,7 @@
 import joblib
 import pandas as pd
 
-class ExtrTreesClassifier:
+class ExtraTreesClassifier:
     def __init__(self):
         path_to_artifacts = "C:/Users/ojare/AIML/ml-django1/my_ml_service/research/"
         self.values_fill_missing = joblib.load(path_to_artifacts + "train_mode.joblib")
