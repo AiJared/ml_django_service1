@@ -27,7 +27,7 @@ class ExtrTreesClassifier:
             categorical_convert = self.encoders[column]
             input_data[column] = categorical_convert.transform(input_data[column])
         return input_data
-    def predic(self, input_data):
+    def predict(self, input_data):
         return self.model.predict_proba(input_data)
     
     def postprocessing(self, input_data):
@@ -36,7 +36,7 @@ class ExtrTreesClassifier:
             label = ">=50K"
         return {"probability": input_data[1], "label": label, "status": "OK"}
     
-    def comput_prediction(self, input_data):
+    def compute_prediction(self, input_data):
         try:
             input_data = self.preprocessing(input_data)
             prediction = self.predict(input_data)[0] # only one sample
